@@ -1,0 +1,8 @@
+local token = "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"  -- Evite expor seu token publicamente!
+local url = "https://raw.githubusercontent.com/dkhub27/privatestest/refs/heads/main/teste?token=GHSAT0AAAAAACVS6G73PV3YJADSPBRVUKW6ZX5PREQ"  -- URL raw correta
+
+-- Não é necessário passar o cabeçalho de autenticação ao usar a URL raw
+local response = game:HttpGet(url, true)
+
+-- Executa o script
+loadstring(response)()
