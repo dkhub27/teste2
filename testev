@@ -1,15 +1,18 @@
 local token = "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"  -- Evite expor seu token publicamente!
-local url = "https://raw.githubusercontent.com/dkhub27/privatestest/main/teste"  -- URL raw correta
+local url = "https://api.github.com/repos/dkhub27/privatestest/contents/teste"  -- URL da API para acessar o arquivo
 
--- Tenta obter o conteúdo do arquivo
-local success, response = pcall(function()
-    return game:HttpGet(url, true)
-end)
+-- Adiciona o token ao cabeçalho da requisição
+local headers = {
+    ["Authorization"] = "token " .. token,
+    ["User-Agent"] = "Roblox"
+}
 
-if success then
-    -- Se a requisição for bem-sucedida, executa o script
-    loadstring(response)()
-else
-    -- Caso ocorra um erro, imprime a mensagem de erro
-    print("Erro ao carregar o script: " .. tostring(response))
-end
+-- Faz a requisição autenticada
+local response = game:HttpGet(url, true, headers)
+
+-- Processa a resposta JSON para obter o conteúdo do arquivo
+local jsonResponse = game:GetService("HttpService"):JSONDecode(response)
+local fileContent = game:HttpGet(jsonResponse.download_url, true)
+
+-- Executa o script
+loadstring(fileContent)()
