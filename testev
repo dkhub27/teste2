@@ -1,18 +1,23 @@
 local token = "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"  -- Evite expor seu token publicamente!
-local url = "https://api.github.com/repos/dkhub27/privatestest/contents/teste"  -- URL da API para acessar o arquivo
+local url = "https://api.github.com/repos/dkhub27/privatestest/contents/teste.lua"  -- URL da API para o arquivo
 
 -- Adiciona o token ao cabeçalho da requisição
 local headers = {
     ["Authorization"] = "token " .. token,
-    ["User-Agent"] = "Roblox"
+    ["User-Agent"] = "Roblox"  -- Pode ser qualquer valor, mas alguns serviços exigem um User-Agent
 }
 
 -- Faz a requisição autenticada
 local response = game:HttpGet(url, true, headers)
 
--- Processa a resposta JSON para obter o conteúdo do arquivo
+-- O corpo da resposta contém informações em formato JSON
 local jsonResponse = game:GetService("HttpService"):JSONDecode(response)
-local fileContent = game:HttpGet(jsonResponse.download_url, true)
+
+-- O conteúdo do arquivo está na propriedade "content", mas está em base64
+local fileContent = jsonResponse.content
+
+-- Decodifica o conteúdo de base64
+local decodedContent = game:GetService("HttpService"):Base64Decode(fileContent)
 
 -- Executa o script
-loadstring(fileContent)()
+loadstring(decodedContent)()
